@@ -4,7 +4,7 @@ import com.arandarkt.game.api.entity.character.player.PlayerCharacter
 import com.arandarkt.game.api.entity.component
 import com.arandarkt.game.api.entity.components.player.PlayerMaskComponent
 import com.arandarkt.game.api.entity.components.player.ViewportComponent
-import com.arandarkt.game.api.entity.components.player.WalkingComponent
+import com.arandarkt.game.api.entity.components.player.MovementComponent
 import com.arandarkt.game.api.koin.inject
 import com.arandarkt.game.api.packets.GamePacketEncoder
 import com.arandarkt.game.api.packets.PacketHeader
@@ -46,7 +46,7 @@ class PlayerUpdates(val player: PlayerCharacter) {
         }
 
         private fun BitBuf.addLocalPlayer(me: PlayerCharacter, other: PlayerCharacter) {
-            val walking = other.component<WalkingComponent>()
+            val walking = other.component<MovementComponent>()
             val myViewport = me.component<ViewportComponent>()
             val otherPosition = other.component<PositionComponent>()
             val myPosition = me.component<PositionComponent>()
@@ -106,7 +106,7 @@ class PlayerUpdates(val player: PlayerCharacter) {
         }
 
         private fun BitBuf.updatePlayerDirection(player: PlayerCharacter) {
-            val walking = player.component<WalkingComponent>()
+            val walking = player.component<MovementComponent>()
             val masks = player.component<PlayerMaskComponent>()
             if (walking.runningDirection != -1) {
                 writeBoolean(true)

@@ -14,6 +14,8 @@ fun Entity.with(vararg comps : Component) = apply {
 
 inline fun <reified C : Component> Entity.component() : C = components.component()
 
+inline fun <reified C : Component> Entity.hasComponent() = components.hasComponent<C>()
+
 fun Entity.getOrCreateComponent(clazz: KClass<*>, supplier: () -> Component = { EMPTY_COMPONENT }) : Component {
     return if(!components.components.containsKey(clazz)) {
         val comp = supplier()

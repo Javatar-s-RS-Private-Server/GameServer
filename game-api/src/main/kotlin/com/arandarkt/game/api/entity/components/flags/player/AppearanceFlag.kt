@@ -3,7 +3,7 @@ package com.arandarkt.game.api.entity.components.flags.player
 import com.arandarkt.game.api.entity.character.player.PlayerCharacter
 import com.arandarkt.game.api.entity.component
 import com.arandarkt.game.api.entity.components.flags.FlagComponent
-import com.arandarkt.game.api.entity.components.player.SkillsComponent
+import com.arandarkt.game.api.entity.components.player.skills.SkillsComponent
 import com.arandarkt.game.api.entity.components.player.apperance.AppearanceComponent
 import com.arandarkt.game.api.entity.components.player.apperance.AppearanceComponent.Companion.FEET
 import com.arandarkt.game.api.entity.components.player.apperance.AppearanceComponent.Companion.HAIR
@@ -13,7 +13,6 @@ import com.arandarkt.game.api.entity.components.player.apperance.AppearanceCompo
 import com.arandarkt.game.api.primitives.stringToLong
 import io.guthix.buffer.writeByteAdd
 import io.netty.buffer.ByteBuf
-import io.netty.util.internal.StringUtil
 
 class AppearanceFlag(val player: PlayerCharacter) : FlagComponent {
     override val flagId: Int = 0x40

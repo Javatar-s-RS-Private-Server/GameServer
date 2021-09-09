@@ -8,4 +8,6 @@ class ChatComponent : Component {
     var effects: Int = 0
     var iconId: Int = 0
 
+    var forcedMessage = ""
+
 }

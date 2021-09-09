@@ -6,6 +6,7 @@ import com.arandarkt.game.api.entity.character.player.PlayerDetails
 import com.arandarkt.game.api.entity.character.player.PlayerRole
 import com.arandarkt.game.api.entity.components.player.*
 import com.arandarkt.game.api.entity.components.player.apperance.AppearanceComponent
+import com.arandarkt.game.api.entity.components.player.skills.SkillsComponent
 import com.arandarkt.game.api.entity.getOrCreate
 import com.arandarkt.game.api.entity.with
 import com.arandarkt.game.api.packets.GameSession
@@ -34,7 +35,7 @@ class Player(override val details: PlayerDetails, override val session: GameSess
         val position = getOrCreate { PositionComponent() }
         with(PlayerMaskComponent())
         with(ViewportComponent(Region(position.getRegionX(), position.getRegionY())))
-        with(WalkingComponent())
+        with(MovementComponent())
         with(ItemContainerComponent())
         with(AppearanceComponent(this))
         with(SkillsComponent())
