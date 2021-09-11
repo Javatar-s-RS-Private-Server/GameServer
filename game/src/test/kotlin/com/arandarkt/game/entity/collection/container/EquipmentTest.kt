@@ -1,7 +1,7 @@
 package com.arandarkt.game.entity.collection.container
 
-import com.arandarkt.game.api.entity.components.items.EquipmentComponent
-import com.arandarkt.game.api.entity.components.player.apperance.AppearanceComponent
+import com.arandarkt.game.api.components.entity.items.EquipmentComponent
+import com.arandarkt.game.api.components.entity.player.apperance.AppearanceComponent
 import com.arandarkt.game.api.entity.item.GameItemBuilder
 import com.arandarkt.game.api.koin.newEquipment
 import com.arandarkt.game.entity.item.ItemBuilder

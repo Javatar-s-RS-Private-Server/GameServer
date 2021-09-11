@@ -1,12 +1,13 @@
 package com.arandarkt.game.api.world.location
 
-import com.arandarkt.game.api.entity.ComponentManager
+import com.arandarkt.game.api.components.Component
+import com.arandarkt.game.api.components.ComponentManager
 import com.arandarkt.game.api.world.location.components.IndexedComponent
 import com.arandarkt.game.api.world.location.components.PositionComponent
 
 class Location {
 
-    val components = ComponentManager()
+    val components = ComponentManager<Component>()
 
     val isIndexed: Boolean get() = components.hasComponent<IndexedComponent>()
     val isPositioned: Boolean get() = components.hasComponent<PositionComponent>()

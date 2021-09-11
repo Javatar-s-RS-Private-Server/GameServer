@@ -1,12 +1,13 @@
 package com.arandarkt.game.entity.item
 
-import com.arandarkt.game.api.entity.ComponentManager
+import com.arandarkt.game.api.components.Component
+import com.arandarkt.game.api.components.ComponentManager
 import com.arandarkt.game.api.entity.component
-import com.arandarkt.game.api.entity.components.items.IdentificationComponent
+import com.arandarkt.game.api.components.entity.items.IdentificationComponent
 import com.arandarkt.game.api.entity.item.GameItem
 
 class Item(
-    override val components: ComponentManager = ComponentManager()
+    override val components: ComponentManager<Component> = ComponentManager()
 ) : GameItem {
     override val itemId: Int by component<IdentificationComponent>()
     override val amount: Int by component<IdentificationComponent>()
@@ -18,7 +19,7 @@ class Item(
     }
 
     override fun copy(amount: Int): GameItem {
-        val comps = ComponentManager()
+        val comps = ComponentManager<Component>()
         for (component in components) {
             comps.with(component.copy())
         }

@@ -1,3 +1,11 @@
+plugins {
+    application
+}
+
+application {
+    mainClass.set("com.arandarkt.application.Application")
+}
+
 dependencies {
     implementation(project(":cache"))
     implementation(project(":game"))

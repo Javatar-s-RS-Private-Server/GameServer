@@ -1,6 +1,6 @@
 package com.arandarkt.game.api.world.location.components
 
-import com.arandarkt.game.api.entity.Component
+import com.arandarkt.game.api.components.Component
 import com.arandarkt.game.api.io.readUnsignedByte
 import com.arandarkt.game.api.io.readInt
 import com.arandarkt.game.api.io.writeByte

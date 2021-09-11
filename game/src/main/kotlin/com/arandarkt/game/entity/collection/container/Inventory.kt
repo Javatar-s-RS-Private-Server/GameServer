@@ -1,11 +1,12 @@
 package com.arandarkt.game.entity.collection.container
 
-import com.arandarkt.game.api.entity.ComponentManager
+import com.arandarkt.game.api.components.Component
+import com.arandarkt.game.api.components.ComponentManager
 import com.arandarkt.game.api.entity.collection.container.ContainerEvent
 import com.arandarkt.game.api.entity.collection.container.ItemContainer
 import com.arandarkt.game.api.entity.component
-import com.arandarkt.game.api.entity.components.items.DefinitionComponent
-import com.arandarkt.game.api.entity.components.items.IdentificationComponent
+import com.arandarkt.game.api.components.entity.items.DefinitionComponent
+import com.arandarkt.game.api.components.entity.items.IdentificationComponent
 import com.arandarkt.game.api.entity.item.GameItem
 import com.arandarkt.game.api.entity.with
 import com.arandarkt.game.api.koin.emptyItem
@@ -16,7 +17,7 @@ class Inventory(override val size: Int = 28) : ItemContainer {
 
     val items = Array<GameItem>(size) {
         Item(
-            ComponentManager()
+            ComponentManager<Component>()
                 .with(IdentificationComponent(-1, 0))
                 .with(IndexedComponent(-1))
         )

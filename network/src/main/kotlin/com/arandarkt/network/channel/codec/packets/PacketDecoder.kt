@@ -10,25 +10,28 @@ import io.netty.handler.codec.ByteToMessageDecoder
 class PacketDecoder : ByteToMessageDecoder() {
     override fun decode(ctx: ChannelHandlerContext, buffer: ByteBuf, out: MutableList<Any>) {
         val session = ctx.channel().gameSession
-        val buf = buffer.copy()
+        val opcode = buffer.readUnsignedByte().toInt()
 
-        val opcode = buf.readUnsignedByte().toInt()
+        if(opcode >= PACKET_SIZES.size) {
+            return
+        }
+
         val header = PACKET_SIZES[opcode]
         val size = if(header < 0) {
-            buf.readHeader(header)
+            buffer.readHeader(header)
         } else header
 
         if(size != -1) {
-            val packetBuffer = buf.readBytes(size)
-            val packetHeader = when(header) {
+            val packetBuffer = buffer.readBytes(size)
+            val packetHeader = when (header) {
                 -1 -> PacketHeader.BYTE
                 -2 -> PacketHeader.SHORT
                 else -> PacketHeader.NORMAL
             }
+            if (opcode != 202 && opcode != 99) {
+                println("Incoming Packet $opcode - $size - $header")
+            }
             session.receivePacket(Packet(packetHeader, opcode, packetBuffer))
-            buf.release(buf.refCnt())
-        } else {
-            buf.release(buf.refCnt())
         }
 
     }

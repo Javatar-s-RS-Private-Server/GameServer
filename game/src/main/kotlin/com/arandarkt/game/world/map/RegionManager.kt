@@ -4,12 +4,12 @@ import com.arandarkt.game.api.entity.Entity
 import com.arandarkt.game.api.entity.character.Character
 import com.arandarkt.game.api.entity.character.player.PlayerCharacter
 import com.arandarkt.game.api.entity.component
-import com.arandarkt.game.api.entity.components.player.ViewportComponent
+import com.arandarkt.game.api.components.entity.player.ViewportComponent
 import com.arandarkt.game.api.world.location.components.PositionComponent
-import com.arandarkt.game.api.world.map.IRegionManager
+import com.arandarkt.game.api.world.map.GameRegionManager
 import com.arandarkt.game.api.world.map.WorldRegion
 
-class RegionManager : IRegionManager {
+class RegionManager : GameRegionManager {
     override val regions = mutableMapOf<Int, Region>()
     override fun region(regionHash: Int): WorldRegion {
         return regions.getOrPut(regionHash) { Region(regionHash shr 8, regionHash and 255) }

@@ -1,6 +1,9 @@
 package com.arandarkt.game.api.entity.components.player
 
-import com.arandarkt.game.api.entity.ComponentManager
+import com.arandarkt.game.api.components.Component
+import com.arandarkt.game.api.components.ComponentManager
+import com.arandarkt.game.api.components.entity.player.ItemContainerComponent
+import com.arandarkt.game.api.components.entity.player.SerializationComponent
 import com.arandarkt.game.api.entity.collection.container.ItemContainer
 import com.arandarkt.game.api.entity.item.GameItemBuilder
 import com.arandarkt.game.api.io.array
@@ -24,7 +27,7 @@ class ComponentSerializationTest {
     @Test
     @Ignore
     fun `inventory serialization test`() {
-        val comps = ComponentManager()
+        val comps = ComponentManager<Component>()
         comps.with(ItemContainerComponent())
         comps.with(SerializationComponent(comps))
 
@@ -49,7 +52,7 @@ class ComponentSerializationTest {
     @Test
     @Ignore
     fun `load test`() {
-        val comps = ComponentManager()
+        val comps = ComponentManager<Component>()
         comps.with(ItemContainerComponent())
         comps.with(SerializationComponent(comps))
 

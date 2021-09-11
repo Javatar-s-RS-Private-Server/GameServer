@@ -1,14 +1,14 @@
 package com.arandarkt.game.api.entity.item
 
-import com.arandarkt.game.api.entity.Component
-import com.arandarkt.game.api.entity.ComponentManager
-import com.arandarkt.game.api.entity.components.items.IdentificationComponent
+import com.arandarkt.game.api.components.Component
+import com.arandarkt.game.api.components.ComponentManager
+import com.arandarkt.game.api.components.entity.items.IdentificationComponent
 import com.arandarkt.game.api.world.location.components.IndexedComponent
 import com.arandarkt.game.api.world.location.components.PositionComponent
 
 interface GameItemBuilder {
 
-    val components: ComponentManager
+    val components: ComponentManager<Component>
 
     fun item(itemId: Int, amount: Int) = apply { with(IdentificationComponent(itemId, amount)) }
 

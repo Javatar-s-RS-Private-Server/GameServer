@@ -1,11 +1,9 @@
 package com.arandarkt.game.api.koin
 
-import com.arandarkt.game.api.entity.components.items.DefinitionComponent
-import com.arandarkt.game.api.entity.components.items.EquipmentComponent
-import com.arandarkt.game.api.entity.components.player.apperance.AppearanceComponent
-import com.arandarkt.game.api.entity.item.GameItem
+import com.arandarkt.game.api.components.entity.items.DefinitionComponent
+import com.arandarkt.game.api.components.entity.items.EquipmentComponent
+import com.arandarkt.game.api.components.entity.player.apperance.AppearanceComponent
 import com.arandarkt.game.api.entity.item.GameItemBuilder
-import com.arandarkt.game.api.world.location.components.PositionComponent
 import org.koin.core.context.GlobalContext
 import org.koin.core.parameter.ParametersDefinition
 import org.koin.core.qualifier.Qualifier
@@ -22,7 +20,7 @@ inline fun <reified T : Any> get(
     noinline parameters: ParametersDefinition? = null
 ): T = GlobalContext.get().get(qualifier, parameters)
 
-fun emptyItem() = newItem(-1, 0).build()
+fun emptyItem() = newItem(-1, 0).with(DefinitionComponent()).build()
 
 fun newItem(itemId: Int, amount: Int = 1): GameItemBuilder {
     return GlobalContext.get().get<GameItemBuilder>().item(itemId, amount)

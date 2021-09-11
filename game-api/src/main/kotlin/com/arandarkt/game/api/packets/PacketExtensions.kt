@@ -1,15 +1,11 @@
 package com.arandarkt.game.api.packets
 
-import com.arandarkt.game.api.packets.outgoing.BuildStaticRegion
-import com.arandarkt.game.api.packets.outgoing.OpenWidgetFramePacket
-import com.arandarkt.game.api.packets.outgoing.OpenWidgetPacket
-import com.arandarkt.game.api.packets.outgoing.PlayerUpdates
+import com.arandarkt.game.api.packets.outgoing.*
 import io.netty.buffer.ByteBuf
 import io.netty.buffer.Unpooled
 import org.koin.core.context.GlobalContext
 import org.koin.core.module.Module
 import org.koin.core.parameter.parametersOf
-import org.koin.dsl.bind
 import org.koin.dsl.module
 
 fun <T> ByteBuf.transform(transformer: GamePacketDecoder<T>) : T  {
@@ -43,8 +39,13 @@ inline fun <reified T : Any> Module.packet(encoder: GamePacketEncoder<T>) {
 }
 
 val packetModule = module {
-    packet(OpenWidgetFramePacket)
-    packet(OpenWidgetPacket)
+    packet(OpenWindow)
+    packet(OpenWidget)
+    packet(CloseWidget)
     packet(BuildStaticRegion)
     packet(PlayerUpdates)
+    packet(SmallVarbit)
+    packet(LargeVarbit)
+    packet(ClientScript)
+    packet(GameMessage)
 }

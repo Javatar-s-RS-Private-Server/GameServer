@@ -13,8 +13,8 @@ class LoginEvents : WorldEvent {
         val logins = world.loginQueue.take(40)
 
         logins.forEach {
-            it.initialize()
             world.players.addEntity(it)
+            it.initialize()
         }
 
         world.loginQueue.removeAll(logins)

@@ -6,6 +6,7 @@ import com.arandarkt.network.channel.codec.login.LoginResponse.Companion.toLogin
 import com.arandarkt.game.api.primitives.longToString
 import com.arandarkt.network.cipher.IsaacCipher
 import io.guthix.buffer.readString0CP1252
+import io.guthix.buffer.readStringCP1252
 import io.netty.buffer.ByteBuf
 import io.netty.channel.ChannelHandlerContext
 import io.netty.handler.codec.ByteToMessageDecoder
@@ -76,7 +77,7 @@ class LoginDecoder : ByteToMessageDecoder() {
 
         try {
             val username: String = longToString(buffer.readLong())
-            val password: String = buffer.readString0CP1252()
+            val password: String = buffer.readStringCP1252()
 
             println("${buffer.readerIndex()} - ${buffer.writerIndex()}")
 
@@ -85,13 +86,13 @@ class LoginDecoder : ByteToMessageDecoder() {
 
             out.add(
                 LoginRequest(
-                username,
-                password,
-                session.sessionKey,
-                LoginResponse.SUCCESSFUL,
-                inCipher,
-                outCipher
-            )
+                    username,
+                    password,
+                    session.sessionKey,
+                    LoginResponse.SUCCESSFUL,
+                    inCipher,
+                    outCipher
+                )
             )
 
         } catch (e: Exception) {

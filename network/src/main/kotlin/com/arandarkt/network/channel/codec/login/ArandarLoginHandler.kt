@@ -20,7 +20,7 @@ class ArandarLoginHandler : SimpleChannelInboundHandler<LoginRequest>() {
     val playerService: PlayerEntityService by inject()
 
     override fun channelRead0(ctx: ChannelHandlerContext, msg: LoginRequest) {
-        if(msg.username.isNotBlank() && msg.password.isNotBlank() && msg.response === LoginResponse.SUCCESSFUL) {
+        if(msg.username.isNotBlank() && msg.password.isNotBlank()) {
             val (validated, details) = validatePlayerLoginRequest(msg, ctx)
             if (validated) {
                 val world: World by inject()
@@ -28,28 +28,30 @@ class ArandarLoginHandler : SimpleChannelInboundHandler<LoginRequest>() {
                 val session = PacketSession(msg.sessionKey, msg.inCipher, msg.outCipher, channel)
                 channel.attr(SESSION_KEY).set(session)
                 val player = preparePlayer(details, session)
-                ctx.writeAndFlush(LoginRequestResponse(msg.sessionKey, player, msg.response))
+                ctx.channel().writeAndFlush(LoginRequestResponse(msg.sessionKey, msg.response, player))
                 ctx.pipeline().replace("decoder", "decoder", PacketDecoder())
                 ctx.pipeline().replace("encoder", "encoder", PacketEncoder())
                 ctx.pipeline().replace("handler", "handler", ArandarPacketHandler())
                 world.queueLogin(player)
             } else {
-                ctx.disconnect()
+                ctx.writeAndFlush(LoginRequestResponse(msg.sessionKey, LoginResponse.INVALID_CREDENTIALS))
             }
         } else {
-            ctx.disconnect()
+            ctx.writeAndFlush(LoginRequestResponse(msg.sessionKey, LoginResponse.INVALID_CREDENTIALS))
         }
     }
 
     private fun preparePlayer(details: PlayerDetails, session: PacketSession): PlayerCharacter {
         val factory: PlayerFactory by inject()
-        return factory.newPlayer(details, session)
+        val player = factory.newPlayer(details, session)
+        player.initializeComponents()
+        return player
     }
 
     private fun validatePlayerLoginRequest(login: LoginRequest, ctx: ChannelHandlerContext) : Pair<Boolean, PlayerDetails> {
         if(playerService.exists(login.username)) {
             val details = playerService[login.username]
-            return (details.username == login.username && details.password == login.password) to details
+            return (details.password == login.password) to details
         } else {
             val details = PlayerDetails(
                 login.username,

@@ -10,7 +10,7 @@ object ArandarCache {
         return if(this::cacheLibrary.isInitialized) {
             cacheLibrary
         } else {
-            cacheLibrary = CacheLibrary.create("data/cache")
+            cacheLibrary = CacheLibrary.create("/home/javatar/IdeaProjects/Arandar-Server/data/cache")
             cacheLibrary
         }
     }

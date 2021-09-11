@@ -1,6 +1,6 @@
 package com.arandarkt.game.api.entity
 
-import com.arandarkt.game.api.entity.ComponentManager.Companion.EMPTY_COMPONENT
+import com.arandarkt.game.api.components.Component
 import kotlin.reflect.KClass
 
 @JvmName("withComponent")
@@ -16,7 +16,7 @@ inline fun <reified C : Component> Entity.component() : C = components.component
 
 inline fun <reified C : Component> Entity.hasComponent() = components.hasComponent<C>()
 
-fun Entity.getOrCreateComponent(clazz: KClass<*>, supplier: () -> Component = { EMPTY_COMPONENT }) : Component {
+fun Entity.getOrCreateComponent(clazz: KClass<*>, supplier: () -> Component) : Component {
     return if(!components.components.containsKey(clazz)) {
         val comp = supplier()
         components.with(comp)

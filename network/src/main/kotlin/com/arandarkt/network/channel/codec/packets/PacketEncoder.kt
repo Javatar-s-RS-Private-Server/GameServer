@@ -14,8 +14,6 @@ class PacketEncoder : MessageToByteEncoder<Packet>() {
 
         if(msg.opcode != -1) {
 
-            println("Encoding packet ${msg.opcode}")
-
             out.writeByte(msg.opcode) //Out Cipher here
             when(msg.header) {
                 PacketHeader.NORMAL -> {}

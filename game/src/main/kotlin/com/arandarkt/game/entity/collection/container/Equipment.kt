@@ -3,9 +3,9 @@ package com.arandarkt.game.entity.collection.container
 import com.arandarkt.game.api.entity.collection.container.ContainerEvent
 import com.arandarkt.game.api.entity.collection.container.ItemContainer
 import com.arandarkt.game.api.entity.component
-import com.arandarkt.game.api.entity.components.items.DefinitionComponent
-import com.arandarkt.game.api.entity.components.items.EquipmentComponent
-import com.arandarkt.game.api.entity.components.player.apperance.AppearanceComponent
+import com.arandarkt.game.api.components.entity.items.DefinitionComponent
+import com.arandarkt.game.api.components.entity.items.EquipmentComponent
+import com.arandarkt.game.api.components.entity.player.apperance.AppearanceComponent
 import com.arandarkt.game.api.entity.item.GameItem
 import com.arandarkt.game.api.koin.emptyItem
 import com.arandarkt.game.api.world.location.components.IndexedComponent
