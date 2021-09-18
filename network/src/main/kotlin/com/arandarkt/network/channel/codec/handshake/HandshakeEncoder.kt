@@ -10,6 +10,7 @@ class HandshakeEncoder : MessageToByteEncoder<HandshakeResponse>() {
         out.writeByte(0)
         if(msg === HandshakeResponse.LOGIN) {
             val key = ctx.channel().handshakeSession.sessionKey
+            println("Session key $key")
             out.writeLong(key)
         }
     }

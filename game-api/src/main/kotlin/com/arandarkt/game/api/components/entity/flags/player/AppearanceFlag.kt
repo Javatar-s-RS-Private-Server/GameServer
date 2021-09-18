@@ -30,7 +30,7 @@ class AppearanceFlag(val player: PlayerCharacter) : FlagComponent {
             writeByte(app.icons[1]) //head icon
 
             if (app.npcId == -1) {
-                val parts: IntArray = app.bodyParts
+                val parts = app.bodyParts
                 for (i in 0..11) {
                     val value = parts[i]
                     if (value == 0) {
@@ -38,11 +38,14 @@ class AppearanceFlag(val player: PlayerCharacter) : FlagComponent {
                     } else {
                         writeShort(value)
                     }
+                    println("Index $i - $value pos ${writerIndex()}")
                 }
             } else {
                 writeShort(-1)
                 writeShort(app.npcId)
             }
+
+            println("Written " + writerIndex())
 
             arrayOf(body[HAIR], body[TORSO], body[LEGS], body[FEET], body[SKIN_COLOR])
                 .forEach { writeByte(it.color) }
@@ -57,10 +60,11 @@ class AppearanceFlag(val player: PlayerCharacter) : FlagComponent {
 
             writeLong(stringToLong(player.details.username))
             writeByte(skills.combatLevel)
-            writeShort(0)
+            writeShort(skills.skillLevel)
         }
 
-        writeByteAdd(buf.writerIndex())
+        println("Writing app flag with size " + buf.writerIndex())
+        writeByte(buf.writerIndex())
         writeBytes(buf)
 
     }

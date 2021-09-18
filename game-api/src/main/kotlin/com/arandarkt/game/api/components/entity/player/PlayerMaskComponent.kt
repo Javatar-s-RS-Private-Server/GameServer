@@ -2,7 +2,7 @@ package com.arandarkt.game.api.components.entity.player
 
 import com.arandarkt.game.api.components.Component
 import com.arandarkt.game.api.components.entity.flags.FlagComponent
-import com.arandarkt.game.api.world.location.components.PositionComponent
+import com.arandarkt.game.api.world.location.components.Position
 
 class PlayerMaskComponent : Component {
 
@@ -14,15 +14,16 @@ class PlayerMaskComponent : Component {
     var syncedMaskData = 0
         private set
 
-    var lastSceneGraph: PositionComponent = PositionComponent(0, 0, 0)
+    var lastSceneGraph: Position = Position(0, 0, 0)
     var shouldUpdateSceneGraph: Boolean = false
-    var isTeleporting: Boolean = false
 
     val flags = mutableListOf<FlagComponent>()
     val syncedFlags = mutableListOf<Boolean>()
 
     fun with(flagComponent: FlagComponent) {
-        flags.add(flagComponent)
+        if (!flags.contains(flagComponent)) {
+            flags.add(flagComponent)
+        }
         maskData = maskData or flagComponent.flagId
     }
 
@@ -35,8 +36,9 @@ class PlayerMaskComponent : Component {
     }
 
     fun reset() {
-        maskData = 0
-        isTeleporting = false
+        if (maskData != 0) {
+            maskData = 0
+        }
     }
 
     override suspend fun onTick(currentTick: Long) {

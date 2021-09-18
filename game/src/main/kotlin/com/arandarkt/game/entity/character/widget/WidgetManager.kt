@@ -34,15 +34,15 @@ class WidgetManager(override val player: PlayerCharacter) : GameWidgetManager {
     }
 
     override fun openTab(tab: TabComponent) {
-        val prevTab = tabs.select(tab.tabId)
+        val prevTab = tabs.select(tab.tabIcon)
         if(prevTab != -1) {
             tabs.tabComponents[prevTab]?.onClose()
         }
-        if(tabs.tabComponents[tab.tabId] == null) {
-            tabs.tabComponents[tab.tabId] = tab
+        if(tabs.tabComponents[tab.tabIcon] == null) {
+            tabs.tabComponents[tab.tabIcon] = tab
         }
-        tabs.tabComponents[tab.tabId]?.onOpen()
-        open(WidgetType.TAB.fixedChildId + tab.tabId, tab.widgetId, true)
+        tabs.tabComponents[tab.tabIcon]?.onOpen()
+        open(tab.tabIcon, tab.widgetId, true)
     }
 
     override fun open(windowChildId: Int, widgetId: Int, overlay: Boolean) {

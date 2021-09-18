@@ -7,7 +7,7 @@ import io.netty.buffer.ByteBuf
 
 class GameMessage(val message: String) {
     companion object : GamePacketEncoder<GameMessage> {
-        override val opcode: Int = 108
+        override val opcode: Int = 238
         override val header: PacketHeader = PacketHeader.BYTE
         override fun encode(writer: ByteBuf, data: GameMessage) {
             writer.writeStringCP1252(data.message)

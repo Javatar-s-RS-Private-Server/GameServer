@@ -6,7 +6,7 @@ import io.netty.buffer.ByteBuf
 
 class Command(val command: String) {
     companion object : GamePacketDecoder<Command> {
-        override val opcode: Int = 165
+        override val opcode: Int = 89
         override fun ByteBuf.decode(): Command {
             return Command(readStringCP1252())
         }

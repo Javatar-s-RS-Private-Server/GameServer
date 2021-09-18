@@ -1,5 +1,6 @@
 package com.arandarkt.application
 
+import com.arandarkt.definitions.cacheModule
 import com.arandarkt.game.api.database.ArandarDatabaseManager
 import com.arandarkt.game.api.database.player.PlayerEntityService
 import com.arandarkt.game.api.entity.collection.EntityLists
@@ -24,6 +25,7 @@ import com.arandarkt.game.world.map.RegionManager
 import com.arandarkt.network.ArandarServer
 import com.arandarkt.xtea.XteaManager
 import com.arandarkt.xtea.loaders.FileLineXteaLoader
+import com.displee.cache.CacheLibrary
 import org.koin.core.context.GlobalContext
 import org.koin.core.context.startKoin
 import org.koin.core.qualifier.named
@@ -39,6 +41,7 @@ object Application {
 
         startKoin {
             modules(module {
+                single { CacheLibrary.create("/home/javatar/IdeaProjects/ArandarKt/data/cache") }
                 single { PlayerEntityService() }
                 single { ArandarDatabaseManager() }
                 single { RegionManager() } bind GameRegionManager::class
@@ -52,7 +55,7 @@ object Application {
                 factory(named("inv")) { Inventory() } bind ItemContainer::class
                 factory(named("equip")) { Equipment() } bind ItemContainer::class
                 factory(named("bank")) { Inventory() } bind ItemContainer::class
-            })
+            }, cacheModule)
         }
         val koin = GlobalContext.get()
         val xteaManager: XteaManager = get()
@@ -60,7 +63,7 @@ object Application {
         val ticker: WorldTicker = koin.get()
         val db: ArandarDatabaseManager = koin.get()
 
-        xteaManager.load(Path.of("/home/javatar/IdeaProjects/Arandar-Server/data/region_xtea"))
+        xteaManager.load(Path.of("/home/javatar/Downloads/468package/xtea"))
         db.connect()
 
         ticker.onTick(LoginEvents())

@@ -10,7 +10,7 @@ import com.arandarkt.game.api.entity.item.GameItem.Companion.isNotEmpty
 
 class AppearanceComponent(val player: PlayerCharacter) : Component {
 
-    val bodyParts = IntArray(14) { -1 }
+    val bodyParts = IntArray(14) { 0 }
     val animations = intArrayOf(
         STAND_ANIM,
         STAND_TURN_ANIM,

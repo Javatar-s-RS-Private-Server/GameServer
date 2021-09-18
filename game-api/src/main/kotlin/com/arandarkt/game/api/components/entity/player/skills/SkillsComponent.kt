@@ -11,6 +11,9 @@ class SkillsComponent : Component {
 
     val skills = EnumMap<Skill, VirtualSkill>(Skill::class.java)
 
+    val skillLevel: Int
+        get() = 0
+
     fun getSkill(skill: Skill) : VirtualSkill {
         return skills[skill]!!
     }

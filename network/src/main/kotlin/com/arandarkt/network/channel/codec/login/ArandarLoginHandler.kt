@@ -20,6 +20,10 @@ class ArandarLoginHandler : SimpleChannelInboundHandler<LoginRequest>() {
     val playerService: PlayerEntityService by inject()
 
     override fun channelRead0(ctx: ChannelHandlerContext, msg: LoginRequest) {
+        if(msg.response !== LoginResponse.SUCCESSFUL) {
+            ctx.writeAndFlush(LoginRequestResponse(msg.sessionKey, msg.response))
+            return
+        }
         if(msg.username.isNotBlank() && msg.password.isNotBlank()) {
             val (validated, details) = validatePlayerLoginRequest(msg, ctx)
             if (validated) {

@@ -11,5 +11,5 @@ enum class WidgetType(
     DIALOGUE(548, 79),
     WINDOW_PANE(548, 0),
     CS_CHATBOX(548, 79),
-    CHATBOX(548, 77);
+    CHATBOX(548, 90);
 }

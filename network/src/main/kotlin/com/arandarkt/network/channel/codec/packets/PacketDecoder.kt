@@ -21,7 +21,7 @@ class PacketDecoder : ByteToMessageDecoder() {
             buffer.readHeader(header)
         } else header
 
-        if(size != -1) {
+        if(size != -1 && size <= buffer.writerIndex()) {
             val packetBuffer = buffer.readBytes(size)
             val packetHeader = when (header) {
                 -1 -> PacketHeader.BYTE

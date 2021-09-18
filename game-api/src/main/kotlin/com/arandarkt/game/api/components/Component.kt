@@ -11,4 +11,8 @@ interface Component {
     fun isEqual(comp: Component) : Boolean {
         return true
     }
+
+    companion object {
+        val VOID_ACTION = object : Component {  }
+    }
 }

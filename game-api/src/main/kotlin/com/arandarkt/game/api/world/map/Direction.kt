@@ -32,15 +32,18 @@ enum class Direction(
 
 
     SOUTH_EAST(1, -1, 5, 0x12c0180, 0x12c0102, 0x12c0183);
+
     val opposite: Direction
         get() = Companion[toInteger() + 2 and 3]
     private val regionManager: GameRegionManager by inject()
     fun toName(direction: Direction): String {
         return direction.name.lowercase(Locale.getDefault())
     }
+
     fun toInteger(): Int {
         return value
     }
+
     fun canMove(l: Location): Boolean {
         val flag: Int = regionManager.getClippingFlag(l.position.z, l.position.x, l.position.y)
         for (f in traversal) {
@@ -70,6 +73,7 @@ enum class Direction(
         fun getDirection(location: Location, l: Location): Direction {
             return getDirection(l.position.x - location.position.x, l.position.y - location.position.y)
         }
+
         fun getDirection(diffX: Int, diffY: Int): Direction {
             if (diffX < 0) {
                 if (diffY < 0) {
@@ -90,6 +94,7 @@ enum class Direction(
                 SOUTH
             } else NORTH
         }
+
         fun forWalkFlag(walkingFlag: Int, rotation: Int): Direction? {
             var walking = walkingFlag
             if (rotation != 0) {
@@ -111,6 +116,7 @@ enum class Direction(
             }
             return null
         }
+
         fun getLogicalDirection(location: Location, l: Location): Direction {
             val offsetX = Math.abs(l.position.x - location.position.x)
             val offsetY = Math.abs(l.position.y - location.position.y)

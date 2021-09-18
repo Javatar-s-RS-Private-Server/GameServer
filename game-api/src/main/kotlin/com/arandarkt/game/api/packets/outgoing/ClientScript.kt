@@ -7,7 +7,7 @@ import io.netty.buffer.ByteBuf
 
 class ClientScript(val scriptId: Int, val sig: String, val args: List<Any> = emptyList()) {
     companion object : GamePacketEncoder<ClientScript> {
-        override val opcode: Int = 69
+        override val opcode: Int = 89
         override val header: PacketHeader = PacketHeader.SHORT
         override fun encode(writer: ByteBuf, data: ClientScript) {
             writer.writeStringCP1252(data.sig)

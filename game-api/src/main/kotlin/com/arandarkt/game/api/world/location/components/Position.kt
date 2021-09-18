@@ -7,7 +7,7 @@ import com.arandarkt.game.api.io.writeByte
 import com.arandarkt.game.api.io.writeInt
 import io.guthix.buffer.BitBuf
 
-class PositionComponent(x: Int = 3222, y: Int = 3217, z: Int = 0) : Component {
+class Position(x: Int = 3222, y: Int = 3217, z: Int = 0) : Component {
     var x: Int = x
         private set
     var y: Int = y
@@ -22,7 +22,7 @@ class PositionComponent(x: Int = 3222, y: Int = 3217, z: Int = 0) : Component {
     }
 
     fun getRegionId(): Int {
-        return x shr 6 shl 8 or (y shr 6)
+        return getRegionX() + (getRegionY() shl 8)
     }
 
     fun getRegionX(): Int {
@@ -49,15 +49,15 @@ class PositionComponent(x: Int = 3222, y: Int = 3217, z: Int = 0) : Component {
         return y - (getRegionY() - 6 shl 3)
     }
 
-    fun getSceneX(loc: PositionComponent): Int {
+    fun getSceneX(loc: Position): Int {
         return x - (loc.getRegionX() - 6 shl 3)
     }
 
-    fun getSceneY(loc: PositionComponent): Int {
+    fun getSceneY(loc: Position): Int {
         return y - (loc.getRegionY() - 6) * 8
     }
 
-    fun withinDistance(other: PositionComponent, dist: Int): Boolean {
+    fun withinDistance(other: Position, dist: Int): Boolean {
         if (other.z != z) {
             return false
         }
@@ -67,11 +67,11 @@ class PositionComponent(x: Int = 3222, y: Int = 3217, z: Int = 0) : Component {
     }
 
 
-    fun copy(x: Int = this.x, y: Int = this.y, z: Int = this.z) = PositionComponent(x, y, z)
+    fun copy(x: Int = this.x, y: Int = this.y, z: Int = this.z) = Position(x, y, z)
 
 
     fun equals(x: Int, y: Int, z: Int): Boolean {
-        return equals(PositionComponent(x, y, z))
+        return equals(Position(x, y, z))
     }
 
     override fun BitBuf.save() {
@@ -98,7 +98,7 @@ class PositionComponent(x: Int = 3222, y: Int = 3217, z: Int = 0) : Component {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as PositionComponent
+        other as Position
 
         if (x != other.x) return false
         if (y != other.y) return false
@@ -108,6 +108,6 @@ class PositionComponent(x: Int = 3222, y: Int = 3217, z: Int = 0) : Component {
     }
 
     companion object {
-        val VOID_LOCATION = PositionComponent(-1, -1, -1)
+        val VOID_LOCATION = Position(-1, -1, -1)
     }
 }

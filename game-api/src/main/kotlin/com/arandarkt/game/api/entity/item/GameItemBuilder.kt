@@ -4,7 +4,7 @@ import com.arandarkt.game.api.components.Component
 import com.arandarkt.game.api.components.ComponentManager
 import com.arandarkt.game.api.components.entity.items.IdentificationComponent
 import com.arandarkt.game.api.world.location.components.IndexedComponent
-import com.arandarkt.game.api.world.location.components.PositionComponent
+import com.arandarkt.game.api.world.location.components.Position
 
 interface GameItemBuilder {
 
@@ -16,7 +16,7 @@ interface GameItemBuilder {
 
     fun build() : GameItem
 
-    fun withPosition(x: Int, y: Int, z: Int) : GameItemBuilder = apply { with(PositionComponent(x, y, z)) }
+    fun withPosition(x: Int, y: Int, z: Int) : GameItemBuilder = apply { with(Position(x, y, z)) }
 
     fun withIndex(index: Int) = apply { with(IndexedComponent(index)) }
 

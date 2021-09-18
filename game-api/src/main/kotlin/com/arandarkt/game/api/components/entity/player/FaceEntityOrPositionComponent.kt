@@ -1,11 +1,11 @@
 package com.arandarkt.game.api.components.entity.player
 
 import com.arandarkt.game.api.components.Component
-import com.arandarkt.game.api.world.location.components.PositionComponent
+import com.arandarkt.game.api.world.location.components.Position
 
 class FaceEntityOrPositionComponent : Component {
 
     var entityIndex = -1
-    var position = PositionComponent.VOID_LOCATION
+    var position = Position.VOID_LOCATION
 
 }

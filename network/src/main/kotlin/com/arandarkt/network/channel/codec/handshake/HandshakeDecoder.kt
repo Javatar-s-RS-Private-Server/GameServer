@@ -15,7 +15,7 @@ class HandshakeDecoder : ByteToMessageDecoder() {
             ctx.channel().handshakeSession.sessionKey = ThreadLocalRandom.current().nextLong()
             out.add(HandshakeResponse.LOGIN)
         } else {
-            out.add(HandshakeResponse.JS5)
+            ctx.disconnect()
         }
     }
 }

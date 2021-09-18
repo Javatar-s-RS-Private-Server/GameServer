@@ -3,7 +3,7 @@ package com.arandarkt.network.channel.codec.login
 import com.arandarkt.game.api.entity.component
 import com.arandarkt.game.api.components.entity.player.PlayerMaskComponent
 import com.arandarkt.game.api.packets.outgoing.BuildStaticRegion
-import com.arandarkt.game.api.world.location.components.PositionComponent
+import com.arandarkt.game.api.world.location.components.Position
 import io.netty.buffer.ByteBuf
 import io.netty.buffer.Unpooled
 import io.netty.channel.ChannelHandlerContext
@@ -31,7 +31,7 @@ class LoginEncoder : MessageToByteEncoder<LoginRequestResponse>() {
                     out.writeByte(BuildStaticRegion.opcode)
                     val buf = Unpooled.buffer()
                     val flags = player.component<PlayerMaskComponent>()
-                    val position = player.component<PositionComponent>()
+                    val position = player.component<Position>()
                     flags.lastSceneGraph = position
                     println("X : ${position.x} - ${position.y} - ${position.z}")
                     BuildStaticRegion.encode(

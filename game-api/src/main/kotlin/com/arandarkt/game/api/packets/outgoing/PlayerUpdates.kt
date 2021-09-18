@@ -8,7 +8,7 @@ import com.arandarkt.game.api.entity.component
 import com.arandarkt.game.api.koin.inject
 import com.arandarkt.game.api.packets.GamePacketEncoder
 import com.arandarkt.game.api.packets.PacketHeader
-import com.arandarkt.game.api.world.location.components.PositionComponent
+import com.arandarkt.game.api.world.location.components.Position
 import com.arandarkt.game.api.world.map.GameRegionManager
 import io.guthix.buffer.BitBuf
 import io.guthix.buffer.toBitMode
@@ -17,7 +17,7 @@ import io.netty.buffer.Unpooled
 
 class PlayerUpdates(val player: PlayerCharacter) {
     companion object : GamePacketEncoder<PlayerUpdates> {
-        override val opcode: Int = 90
+        override val opcode: Int = 74
         override val header: PacketHeader = PacketHeader.SHORT
 
         private val regionManager: GameRegionManager by inject()
@@ -34,7 +34,6 @@ class PlayerUpdates(val player: PlayerCharacter) {
                     toByteMode().writeBytes(flagBuff)
                 }
             }
-            flagBuff.release(flagBuff.refCnt())
         }
 
         private fun BitBuf.addLocalPlayers(player: PlayerCharacter, flagBuff: ByteBuf) {
@@ -54,8 +53,8 @@ class PlayerUpdates(val player: PlayerCharacter) {
 
         private fun BitBuf.addLocalPlayer(me: PlayerCharacter, local: PlayerCharacter, flagBuff: ByteBuf) {
             val myView = me.component<ViewportComponent>()
-            val myPos = me.component<PositionComponent>()
-            val localPos = local.component<PositionComponent>()
+            val myPos = me.component<Position>()
+            val localPos = local.component<Position>()
             val localMov = local.component<MovementComponent>()
             val localMasks = local.component<PlayerMaskComponent>()
             writeBits(local.index, 11)
@@ -67,11 +66,11 @@ class PlayerUpdates(val player: PlayerCharacter) {
             if (offsetX < 0) {
                 offsetX += 32
             }
+            writeBits(offsetX, 5)
             writeBits(offsetY, 5)
             writeBits(localMov.direction.ordinal, 3)
             writeBoolean(true)
             writeBoolean(true)
-            writeBits(offsetX, 5)
 
             myView.localPlayers.add(local)
 
@@ -86,9 +85,9 @@ class PlayerUpdates(val player: PlayerCharacter) {
             val iterator = viewport.localPlayers.iterator()
             while(iterator.hasNext()) {
                 val localPlayer = iterator.next()
-                val localMasks = localPlayer.component<PlayerMaskComponent>()
-                val localPos = localPlayer.component<PositionComponent>()
-                if(!localPlayer.session.isConnected() || !localPos.withinDistance(player.component(), 15) || localMasks.isTeleporting) {
+                val localMov = localPlayer.component<MovementComponent>()
+                val localPos = localPlayer.component<Position>()
+                if(!localPlayer.session.isConnected() || !localPos.withinDistance(player.component(), 15) || localMov.isTeleporting) {
                     writeBoolean(true)
                     writeBits(3, 2)
                     iterator.remove()
@@ -100,16 +99,17 @@ class PlayerUpdates(val player: PlayerCharacter) {
 
         private fun BitBuf.writeLocationUpdate(player: PlayerCharacter, flagBuff: ByteBuf) {
             val masks = player.component<PlayerMaskComponent>()
-            val pos = player.component<PositionComponent>()
+            val mov = player.component<MovementComponent>()
+            val pos = player.component<Position>()
             val lpos = masks.lastSceneGraph
-            if(masks.shouldUpdateSceneGraph || masks.isTeleporting) {
+            if(masks.shouldUpdateSceneGraph || mov.isTeleporting) {
                 writeBoolean(true)
                 writeBits(3, 2)
-                writeBits(pos.z, 2)
-                writeBits(pos.getSceneX(lpos), 7)
-                writeBoolean(masks.isTeleporting)
                 writeBits(pos.getSceneY(lpos), 7)
+                writeBits(pos.getSceneX(lpos), 7)
                 writeBoolean(masks.isUpdateRequired)
+                writeBits(pos.z, 2)
+                writeBoolean(mov.isTeleporting)
                 if (masks.isUpdateRequired) {
                     flagBuff.writeFlags(player)
                 }
