@@ -15,8 +15,23 @@ class ObjectDefinitionComponent(val id: Int) : Component {
     val def: ObjectDefinition
         get() = if (manager.definitions.containsKey(id)) {
             manager.load(id)
-        } else manager.load(id, Unpooled.wrappedBuffer(cache.data(2, 6, id)))
+        } else {
+            val data = cache.data(2, 6, id)
+            if (data != null) {
+                manager.load(id, Unpooled.wrappedBuffer(cache.data(2, 6, id)))
+            } else {
+                ObjectDefinition().also { it.id = id }
+            }
+        }
 
+    fun hasAction(action: String) : Boolean {
+        for (a in def.actions) {
+            if(a == action) {
+                return true
+            }
+        }
+        return false
+    }
 
     fun hasActions(): Boolean {
         if (def.configChangeDest == null) {

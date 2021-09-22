@@ -6,6 +6,6 @@ import com.arandarkt.game.api.packets.GameSession
 
 fun interface PlayerFactory {
 
-    fun newPlayer(details: PlayerDetails, session: GameSession): PlayerCharacter
+    fun newPlayer(details: PlayerDetails): PlayerCharacter
 
 }

@@ -2,7 +2,9 @@ package com.arandarkt.game.api.world.map
 
 import com.arandarkt.game.api.koin.inject
 import com.arandarkt.game.api.world.location.Location
+import com.arandarkt.game.api.world.location.components.Position
 import java.util.*
+import kotlin.math.abs
 
 enum class Direction(
 
@@ -44,16 +46,6 @@ enum class Direction(
         return value
     }
 
-    fun canMove(l: Location): Boolean {
-        val flag: Int = regionManager.getClippingFlag(l.position.z, l.position.x, l.position.y)
-        for (f in traversal) {
-            if (flag and f != 0) {
-                return false
-            }
-        }
-        return true
-    }
-
     companion object {
 
         operator fun get(rotation: Int): Direction {
@@ -65,14 +57,6 @@ enum class Direction(
             throw IllegalArgumentException("Invalid direction value - $rotation")
         }
 
-        fun getWalkPoint(direction: Direction): Point {
-            return Point(direction.stepX, direction.stepY)
-        }
-
-
-        fun getDirection(location: Location, l: Location): Direction {
-            return getDirection(l.position.x - location.position.x, l.position.y - location.position.y)
-        }
 
         fun getDirection(diffX: Int, diffY: Int): Direction {
             if (diffX < 0) {
@@ -117,16 +101,16 @@ enum class Direction(
             return null
         }
 
-        fun getLogicalDirection(location: Location, l: Location): Direction {
-            val offsetX = Math.abs(l.position.x - location.position.x)
-            val offsetY = Math.abs(l.position.y - location.position.y)
+        fun getLogicalDirection(location: Position, l: Position): Direction {
+            val offsetX = abs(l.x - location.x)
+            val offsetY = abs(l.y - location.y)
             if (offsetX > offsetY) {
-                return if (l.position.x > location.position.x) {
+                return if (l.x > location.x) {
                     EAST
                 } else {
                     WEST
                 }
-            } else if (l.position.y < location.position.y) {
+            } else if (l.y < location.y) {
                 return SOUTH
             }
             return NORTH

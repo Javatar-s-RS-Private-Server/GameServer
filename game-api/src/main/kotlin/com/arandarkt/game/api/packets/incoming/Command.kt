@@ -8,6 +8,7 @@ class Command(val command: String) {
     companion object : GamePacketDecoder<Command> {
         override val opcode: Int = 89
         override fun ByteBuf.decode(): Command {
+            skipBytes(1)
             return Command(readStringCP1252())
         }
     }

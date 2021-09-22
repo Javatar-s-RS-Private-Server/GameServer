@@ -3,7 +3,9 @@ package com.arandarkt.game.api.components
 import io.guthix.buffer.BitBuf
 
 interface Component {
-    suspend fun onTick(currentTick: Long) {}
+    suspend fun onTick(currentTick: Long) : Boolean {
+        return false
+    }
     fun BitBuf.save() {}
     fun BitBuf.load() {}
     fun copy() = this
@@ -12,7 +14,5 @@ interface Component {
         return true
     }
 
-    companion object {
-        val VOID_ACTION = object : Component {  }
-    }
+
 }

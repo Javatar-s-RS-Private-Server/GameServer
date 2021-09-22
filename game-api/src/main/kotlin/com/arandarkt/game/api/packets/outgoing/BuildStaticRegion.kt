@@ -34,14 +34,13 @@ class BuildStaticRegion(val position: Position) {
                         println(regionId)
                         if(regionKey != null) {
                             val keys = regionKey.key
-                            writer.writeIntME(keys[0])
-                            writer.writeIntME(keys[1])
-                            writer.writeIntME(keys[2])
-                            writer.writeIntME(keys[3])
+                            writer.writeInt(keys[0])
+                            writer.writeInt(keys[1])
+                            writer.writeInt(keys[2])
+                            writer.writeInt(keys[3])
                         } else {
-                            repeat(4) { writer.writeIntME(0) }
                         }*/
-                        repeat(4) { writer.writeIntME(0) }
+                        repeat(4) { writer.writeInt(0) }
                     }
                 }
                 writer.writeShortLE(getSceneX())

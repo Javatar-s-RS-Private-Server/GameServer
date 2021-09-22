@@ -1,6 +1,8 @@
 package com.arandarkt.game.api.packets
 
-interface GameSession {
+import com.arandarkt.game.api.components.Component
+
+interface GameSession : Component {
     fun sendPacket(packet: Packet)
     fun <T> handlePacket(transformer: GamePacketDecoder<T>, action: suspend (T) -> Unit)
     fun <T> handlePacket(transformer: GamePacketDecoder<T>, action: PacketHandler<T>)
@@ -8,12 +10,18 @@ interface GameSession {
     fun disconnect()
     fun flush()
 
-    companion object {
+    override suspend fun onTick(currentTick: Long): Boolean {
+        if (isConnected()) {
+            flush()
+            return false
+        }
+        return true
+    }
 
+
+    companion object {
         inline fun <reified T : Any> GameSession.sendPacket(value: T) {
             sendPacket(value.toPacket())
         }
-
     }
-
 }

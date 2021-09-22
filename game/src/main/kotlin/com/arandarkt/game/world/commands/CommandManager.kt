@@ -13,7 +13,7 @@ class CommandManager(private val player: PlayerCharacter) : GameCommandManager, 
     override val components: ComponentManager<CommandComponent> = ComponentManager()
     private val commands = mutableMapOf<String, KClass<*>>()
     override fun handlePacket(packet: Command) {
-        println("Attempting command ${packet.command}")
+        println("Attempting command ${packet.command} - ${packet.command[0].code}")
         val args = packet.command.split(" ")
         val name = args[0]
         val kclass = commands[name]

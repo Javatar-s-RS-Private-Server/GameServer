@@ -32,5 +32,4 @@ class IdentificationComponent(private var itemId: Int, private var amount: Int) 
         }
     }
 
-    override suspend fun onTick(currentTick: Long) {}
 }

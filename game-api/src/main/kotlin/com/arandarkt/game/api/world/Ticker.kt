@@ -20,9 +20,11 @@ interface Ticker : CoroutineScope {
     companion object {
         val gameDispatcher = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
 
-        val Dispatchers.GAME: CoroutineDispatcher
-            get() = gameDispatcher
+        val GAME get() = CoroutineScope(gameDispatcher)
 
+        suspend fun delayTicks(ticks: Long) {
+            delay((600 * ticks))
+        }
     }
 
 }

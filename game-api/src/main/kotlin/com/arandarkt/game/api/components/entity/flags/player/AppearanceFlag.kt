@@ -12,6 +12,7 @@ import com.arandarkt.game.api.components.entity.player.apperance.AppearanceCompo
 import com.arandarkt.game.api.components.entity.player.apperance.AppearanceComponent.Companion.TORSO
 import com.arandarkt.game.api.primitives.stringToLong
 import io.guthix.buffer.writeByteAdd
+import io.guthix.buffer.writeBytesReversed
 import io.netty.buffer.ByteBuf
 import io.netty.buffer.Unpooled
 
@@ -66,6 +67,5 @@ class AppearanceFlag(val player: PlayerCharacter) : FlagComponent {
         println("Writing app flag with size " + buf.writerIndex())
         writeByte(buf.writerIndex())
         writeBytes(buf)
-
     }
 }

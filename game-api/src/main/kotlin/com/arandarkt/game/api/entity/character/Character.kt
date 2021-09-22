@@ -1,13 +1,16 @@
 package com.arandarkt.game.api.entity.character
 
-import com.arandarkt.game.api.components.Component
 import com.arandarkt.game.api.entity.Entity
-import kotlinx.coroutines.flow.MutableStateFlow
+import com.arandarkt.game.api.entity.character.action.CharacterAction
+import com.arandarkt.game.api.entity.hasComponent
+import com.arandarkt.game.api.packets.GameSession
 
 interface Character : Entity {
 
     val index: Int
 
-    val action: MutableStateFlow<Component>
+    companion object {
+        val Character.isPlayer get() = hasComponent<GameSession>()
+    }
 
 }

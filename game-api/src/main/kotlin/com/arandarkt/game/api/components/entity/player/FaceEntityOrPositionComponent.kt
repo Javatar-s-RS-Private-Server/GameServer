@@ -8,4 +8,7 @@ class FaceEntityOrPositionComponent : Component {
     var entityIndex = -1
     var position = Position.VOID_LOCATION
 
+    fun shouldFaceEntity() = entityIndex != -1
+    fun shouldFacePosition() = position !== Position.VOID_LOCATION
+
 }

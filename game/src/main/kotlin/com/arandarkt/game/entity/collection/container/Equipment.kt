@@ -3,7 +3,7 @@ package com.arandarkt.game.entity.collection.container
 import com.arandarkt.game.api.entity.collection.container.ContainerEvent
 import com.arandarkt.game.api.entity.collection.container.ItemContainer
 import com.arandarkt.game.api.entity.component
-import com.arandarkt.game.api.components.entity.items.DefinitionComponent
+import com.arandarkt.game.api.components.entity.items.ItemDefinitionComponent
 import com.arandarkt.game.api.components.entity.items.EquipmentComponent
 import com.arandarkt.game.api.components.entity.player.apperance.AppearanceComponent
 import com.arandarkt.game.api.entity.item.GameItem
@@ -19,7 +19,7 @@ class Equipment(override val size: Int = 14) : ItemContainer {
         if (slot.index == -1)
             return ContainerEvent(invalid = true)
 
-        val def = item.component<DefinitionComponent>()
+        val def = item.component<ItemDefinitionComponent>()
         val equipComp = item.component<EquipmentComponent>()
         val equipSlot = slot.index
         val equiped = items[equipSlot]

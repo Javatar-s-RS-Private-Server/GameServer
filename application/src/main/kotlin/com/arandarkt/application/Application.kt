@@ -11,6 +11,7 @@ import com.arandarkt.game.api.packets.packetModule
 import com.arandarkt.game.api.world.Ticker
 import com.arandarkt.game.api.world.World
 import com.arandarkt.game.api.world.map.GameRegionManager
+import com.arandarkt.game.api.world.map.path.PathFinder
 import com.arandarkt.game.entity.collection.EntityCollections
 import com.arandarkt.game.entity.collection.container.Equipment
 import com.arandarkt.game.entity.collection.container.Inventory
@@ -25,6 +26,7 @@ import com.arandarkt.game.world.map.RegionManager
 import com.arandarkt.network.ArandarServer
 import com.arandarkt.xtea.XteaManager
 import com.arandarkt.xtea.loaders.FileLineXteaLoader
+import com.arandarkt.xtea.loaders.XteaJsonLoader
 import com.displee.cache.CacheLibrary
 import org.koin.core.context.GlobalContext
 import org.koin.core.context.startKoin
@@ -49,8 +51,9 @@ object Application {
                 single { GameWorld() } bind World::class
                 single { PlayerFactory() } bind com.arandarkt.game.api.world.PlayerFactory::class
                 single { EntityCollections() } bind EntityLists::class
-                single { XteaManager(FileLineXteaLoader()) }
+                single { XteaManager(XteaJsonLoader()) }
                 factory { ItemBuilder() } bind GameItemBuilder::class
+                single { PathFinder() }
             }, packetModule,  module {
                 factory(named("inv")) { Inventory() } bind ItemContainer::class
                 factory(named("equip")) { Equipment() } bind ItemContainer::class
@@ -63,7 +66,7 @@ object Application {
         val ticker: WorldTicker = koin.get()
         val db: ArandarDatabaseManager = koin.get()
 
-        xteaManager.load(Path.of("/home/javatar/Downloads/468package/xtea"))
+        xteaManager.load(Path.of("/home/javatar/IdeaProjects/ArandarKt/data/xteas.json"))
         db.connect()
 
         ticker.onTick(LoginEvents())

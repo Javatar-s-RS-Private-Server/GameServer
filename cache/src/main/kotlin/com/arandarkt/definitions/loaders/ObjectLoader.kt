@@ -86,6 +86,14 @@ class ObjectLoader {
                     .readUnsignedShort().toShort()
                 i_4_++
             }
+        } else if(opcode == 41) {
+            val textureReplaceCount = stream.readUnsignedByte().toInt()
+            textureToFind = ShortArray(textureReplaceCount)
+            textureToReplace = ShortArray(textureReplaceCount)
+            for (i in 0 until textureReplaceCount) {
+                textureToFind!![i] = stream.readUnsignedShort().toShort()
+                textureToReplace!![i] = stream.readUnsignedShort().toShort()
+            }
         } else if (opcode == 60) {
             anInt2711 = stream.readUnsignedShort()
         } else if (opcode == 62) {
@@ -105,7 +113,7 @@ class ObjectLoader {
             mapSceneID = stream
                 .readUnsignedShort()
         } else if (opcode == 69) {
-            anInt2758 = stream
+            walkingFlag = stream
                 .readUnsignedByte().toInt()
         } else if (opcode.inv() == -71) {
             offsetX = stream.readShort().toInt()
@@ -151,6 +159,8 @@ class ObjectLoader {
                     .readUnsignedShort()
                 i_3_++
             }
+        } else if(opcode == 81) {
+            stream.skipBytes(1)
         }
     }
 }

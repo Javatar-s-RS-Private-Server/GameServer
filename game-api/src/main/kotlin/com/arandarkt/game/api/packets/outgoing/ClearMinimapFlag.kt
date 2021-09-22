@@ -6,7 +6,7 @@ import io.netty.buffer.ByteBuf
 
 class ClearMinimapFlag {
     companion object : GamePacketEncoder<ClearMinimapFlag> {
-        override val opcode: Int = 68
+        override val opcode: Int = 134
         override val header: PacketHeader = PacketHeader.NORMAL
         override fun encode(writer: ByteBuf, data: ClearMinimapFlag) {}
     }

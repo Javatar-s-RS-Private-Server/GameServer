@@ -11,13 +11,18 @@ import com.arandarkt.game.api.world.map.MapRegion
 import java.util.*
 import kotlin.collections.HashSet
 
-class Region(override val regionX: Int, override val regionY: Int) : MapRegion {
+class Region(override val regionId: Int, override val landscape: Array<Array<BooleanArray>> = emptyArray()) : MapRegion {
 
     override val players = LinkedList<PlayerCharacter>()
     override val npcs = LinkedList<Character>()
     override val objects = LinkedList<GameObject>()
-
     override val clippingMasks: Array<Array<IntArray>> = Array(4) { Array(128) { IntArray(128) } }
+
+    override val regionX: Int
+        get() = regionId shr 8
+    override val regionY: Int
+        get() = regionId and 255
+
     override var isClipped = false
         private set
 
@@ -133,11 +138,16 @@ class Region(override val regionX: Int, override val regionY: Int) : MapRegion {
     }
 
     override fun getClippingMask(x: Int, y: Int, z: Int): Int {
-        if (clippingMasks[z].isEmpty() || !isClipped) {
+        if (!isClipped) {
+            println("Region not clipped $regionId")
             return -1
         }
         val localX: Int = x - (x shr 7 shl 7)
         val localY: Int = y - (y shr 7 shl 7)
+        val mask = clippingMasks[z][localX][localY]
+        if(regionId == 12850) {
+            println("X $x $y $z - $mask")
+        }
         return clippingMasks[z][localX][localY]
     }
 

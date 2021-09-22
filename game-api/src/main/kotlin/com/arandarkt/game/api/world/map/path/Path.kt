@@ -3,7 +3,6 @@ package com.arandarkt.game.api.world.map.path
 import com.arandarkt.game.api.components.entity.player.MovementComponent
 import com.arandarkt.game.api.entity.character.Character
 import com.arandarkt.game.api.entity.component
-import com.arandarkt.game.api.world.map.Point
 import java.util.*
 
 class Path {

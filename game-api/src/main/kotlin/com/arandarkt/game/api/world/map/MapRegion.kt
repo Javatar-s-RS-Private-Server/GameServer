@@ -8,6 +8,7 @@ import java.util.*
 import kotlin.collections.HashSet
 
 interface MapRegion {
+    val regionId: Int
     val regionX: Int
     val regionY: Int
     val players: LinkedList<PlayerCharacter>
@@ -15,6 +16,11 @@ interface MapRegion {
     val objects: LinkedList<GameObject>
     val clippingMasks: Array<Array<IntArray>>
     val isClipped: Boolean
+    val landscape: Array<Array<BooleanArray>>
+
+    val isActive: Boolean
+        get() = players.size > 0
+
     fun addClipping(obj: GameObject)
     fun removeClipping(obj: GameObject)
     fun addClipping(x: Int, y: Int, z: Int, mask: Int)

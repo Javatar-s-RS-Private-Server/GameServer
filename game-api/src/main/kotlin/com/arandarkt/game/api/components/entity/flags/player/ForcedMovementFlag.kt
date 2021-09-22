@@ -4,7 +4,7 @@ import com.arandarkt.game.api.entity.character.player.PlayerCharacter
 import com.arandarkt.game.api.entity.component
 import com.arandarkt.game.api.components.entity.flags.FlagComponent
 import com.arandarkt.game.api.components.entity.player.ForcedMovementComponent
-import com.arandarkt.game.api.components.entity.player.PlayerMaskComponent
+import com.arandarkt.game.api.components.entity.player.UpdateMasksComponent
 import com.arandarkt.game.api.io.writeByteC
 import io.guthix.buffer.writeByteAdd
 import io.guthix.buffer.writeByteSub
@@ -15,7 +15,7 @@ class ForcedMovementFlag(val player: PlayerCharacter) : FlagComponent {
     override val flagId: Int = 0x400
 
     override fun ByteBuf.writeFlag() {
-        val masks = player.component<PlayerMaskComponent>()
+        val masks = player.component<UpdateMasksComponent>()
         val mov = player.component<ForcedMovementComponent>()
         writeByteSub(mov.forcedStartPosition.getSceneX(masks.lastSceneGraph))
         writeByteSub(mov.forcedStartPosition.getSceneY(masks.lastSceneGraph))

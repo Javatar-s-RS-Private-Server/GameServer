@@ -2,7 +2,7 @@ package com.arandarkt.game.api.components.entity.items
 
 import com.arandarkt.game.api.components.Component
 
-class DefinitionComponent(
+class ItemDefinitionComponent(
     val stackable: Boolean = false,
     val removeSleeves: Boolean = false,
     val removeHead: Boolean = false,
@@ -10,6 +10,6 @@ class DefinitionComponent(
 ) : Component {
 
     override fun copy(): Component {
-        return DefinitionComponent(this.stackable)
+        return ItemDefinitionComponent(this.stackable)
     }
 }

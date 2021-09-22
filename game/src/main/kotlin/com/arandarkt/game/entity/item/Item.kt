@@ -11,6 +11,7 @@ class Item(
 ) : GameItem {
     override val itemId: Int by component<IdentificationComponent>()
     override val amount: Int by component<IdentificationComponent>()
+    override val worldSize: Int = 1
 
     override suspend fun onTick(tick: Long) {
         for (component in components) {

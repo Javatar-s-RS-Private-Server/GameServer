@@ -1,12 +1,13 @@
 package com.arandarkt.game.api.packets.outgoing
 
 import com.arandarkt.game.api.components.entity.player.MovementComponent
-import com.arandarkt.game.api.components.entity.player.PlayerMaskComponent
+import com.arandarkt.game.api.components.entity.player.UpdateMasksComponent
 import com.arandarkt.game.api.components.entity.player.ViewportComponent
 import com.arandarkt.game.api.entity.character.player.PlayerCharacter
 import com.arandarkt.game.api.entity.component
 import com.arandarkt.game.api.koin.inject
 import com.arandarkt.game.api.packets.GamePacketEncoder
+import com.arandarkt.game.api.packets.GameSession
 import com.arandarkt.game.api.packets.PacketHeader
 import com.arandarkt.game.api.world.location.components.Position
 import com.arandarkt.game.api.world.map.GameRegionManager
@@ -41,7 +42,8 @@ class PlayerUpdates(val player: PlayerCharacter) {
             val localPlayers = regionManager.getLocalPlayers(player, 15)
             var addCount = 0
             for (localPlayer in localPlayers) {
-                if(localPlayer === player || !localPlayer.session.isConnected() || myViewport.localPlayers.contains(localPlayer)) {
+                val localSession = localPlayer.component<GameSession>()
+                if(localPlayer === player || !localSession.isConnected() || myViewport.localPlayers.contains(localPlayer)) {
                     continue
                 }
                 if(myViewport.localPlayers.size >= 255 || ++addCount > 10) {
@@ -56,7 +58,7 @@ class PlayerUpdates(val player: PlayerCharacter) {
             val myPos = me.component<Position>()
             val localPos = local.component<Position>()
             val localMov = local.component<MovementComponent>()
-            val localMasks = local.component<PlayerMaskComponent>()
+            val localMasks = local.component<UpdateMasksComponent>()
             writeBits(local.index, 11)
             var offsetX: Int = localPos.x - myPos.x
             var offsetY: Int = localPos.y - myPos.y
@@ -87,7 +89,8 @@ class PlayerUpdates(val player: PlayerCharacter) {
                 val localPlayer = iterator.next()
                 val localMov = localPlayer.component<MovementComponent>()
                 val localPos = localPlayer.component<Position>()
-                if(!localPlayer.session.isConnected() || !localPos.withinDistance(player.component(), 15) || localMov.isTeleporting) {
+                val session = localPlayer.component<GameSession>()
+                if(!session.isConnected() || !localPos.withinDistance(player.component(), 15) || localMov.isTeleporting) {
                     writeBoolean(true)
                     writeBits(3, 2)
                     iterator.remove()
@@ -98,7 +101,7 @@ class PlayerUpdates(val player: PlayerCharacter) {
         }
 
         private fun BitBuf.writeLocationUpdate(player: PlayerCharacter, flagBuff: ByteBuf) {
-            val masks = player.component<PlayerMaskComponent>()
+            val masks = player.component<UpdateMasksComponent>()
             val mov = player.component<MovementComponent>()
             val pos = player.component<Position>()
             val lpos = masks.lastSceneGraph
@@ -120,7 +123,7 @@ class PlayerUpdates(val player: PlayerCharacter) {
 
         private fun BitBuf.writeWalkingLocation(player: PlayerCharacter, flagBuff: ByteBuf) {
             val mov = player.component<MovementComponent>()
-            val masks = player.component<PlayerMaskComponent>()
+            val masks = player.component<UpdateMasksComponent>()
             if (mov.runningDirection != -1) {
                 writeBoolean(true)
                 writeBits(2, 2)
@@ -148,7 +151,7 @@ class PlayerUpdates(val player: PlayerCharacter) {
         }
 
         private fun ByteBuf.writeFlags(player: PlayerCharacter) {
-            val masks = player.component<PlayerMaskComponent>()
+            val masks = player.component<UpdateMasksComponent>()
             if (masks.maskData > 0x100) {
                 masks.markAsPlayerMask()
                 writeByte(masks.maskData)
@@ -156,10 +159,12 @@ class PlayerUpdates(val player: PlayerCharacter) {
             } else {
                 writeByte(masks.maskData)
             }
-            while(masks.flags.isNotEmpty()) {
-                val flag = masks.flags.removeFirst()
-                with(flag) { writeFlag() }
+
+            for (key in masks.flags.keys) {
+                val value = masks.flags[key]!!
+                with(value) { writeFlag() }
             }
+            masks.flags.clear()
         }
     }
 }

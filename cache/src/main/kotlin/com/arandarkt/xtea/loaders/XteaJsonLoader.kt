@@ -12,9 +12,9 @@ class XteaJsonLoader : XteaLoader {
     private val gson = GsonBuilder().disableHtmlEscaping().setPrettyPrinting().create()
 
     override fun load(path: Path): List<RegionKey> {
-        return this.gson.fromJson<List<RegionKey>>(
+        return this.gson.fromJson<Array<RegionKey>>(
             FileReader(path.toFile()),
-            object : TypeToken<List<RegionKey>>() {}.rawType
-        )
+            object : TypeToken<Array<RegionKey>>() {}.rawType
+        ).toList()
     }
 }

@@ -47,8 +47,8 @@ class ArandarLoginHandler : SimpleChannelInboundHandler<LoginRequest>() {
 
     private fun preparePlayer(details: PlayerDetails, session: PacketSession): PlayerCharacter {
         val factory: PlayerFactory by inject()
-        val player = factory.newPlayer(details, session)
-        player.initializeComponents()
+        val player = factory.newPlayer(details)
+        player.initializePlayer(session)
         return player
     }
 

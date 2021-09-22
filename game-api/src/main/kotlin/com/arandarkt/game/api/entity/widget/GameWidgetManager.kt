@@ -23,4 +23,10 @@ interface GameWidgetManager {
         widget?.onTick(currentTick)
 
     }
+
+    companion object {
+        fun GameWidgetManager.hideTab() {
+
+        }
+    }
 }

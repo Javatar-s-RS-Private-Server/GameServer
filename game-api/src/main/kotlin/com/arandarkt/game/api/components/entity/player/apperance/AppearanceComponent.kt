@@ -3,7 +3,7 @@ package com.arandarkt.game.api.components.entity.player.apperance
 import com.arandarkt.game.api.components.Component
 import com.arandarkt.game.api.entity.character.player.PlayerCharacter
 import com.arandarkt.game.api.entity.component
-import com.arandarkt.game.api.components.entity.items.DefinitionComponent
+import com.arandarkt.game.api.components.entity.items.ItemDefinitionComponent
 import com.arandarkt.game.api.components.entity.player.ItemContainerComponent
 import com.arandarkt.game.api.entity.item.GameItem
 import com.arandarkt.game.api.entity.item.GameItem.Companion.isNotEmpty
@@ -72,7 +72,7 @@ class AppearanceComponent(val player: PlayerCharacter) : Component {
             setClothes(4, body[TORSO].look)
         }
 
-        val chestDef = chest.component<DefinitionComponent>()
+        val chestDef = chest.component<ItemDefinitionComponent>()
         if (chest.isNotEmpty() && chestDef.removeSleeves) {
             clearBodyPart(6)
         } else {
@@ -83,7 +83,7 @@ class AppearanceComponent(val player: PlayerCharacter) : Component {
         } else {
             setClothes(7, body[LEGS].look)
         }
-        val hatDef = hat.component<DefinitionComponent>()
+        val hatDef = hat.component<ItemDefinitionComponent>()
         if (hat.isNotEmpty() && hatDef.removeHead) {
             clearBodyPart(8)
         } else {
@@ -115,8 +115,6 @@ class AppearanceComponent(val player: PlayerCharacter) : Component {
     fun clearBodyPart(part: Int) {
         bodyParts[part] = 0
     }
-
-    override suspend fun onTick(currentTick: Long) {}
 
     companion object {
         /**

@@ -1,118 +1,39 @@
 package com.arandarkt.game.api.world.map.path
 
+import com.arandarkt.game.api.koin.inject
 import com.arandarkt.game.api.world.location.components.Position
+import com.arandarkt.game.api.world.map.GameRegionManager
+import org.rsmod.pathfinder.Route
+import org.rsmod.pathfinder.SmartPathFinder
 
-interface PathFinder {
+class PathFinder {
 
-    fun findPath(
-        start: Position,
-        moverSize: Int,
-        end: Position,
-        sizeX: Int,
-        sizeY: Int,
-        rotation: Int,
-        type: Int,
-        walkingFlag: Int,
-        near: Boolean
-    ): Path
+    private val regionManager: GameRegionManager by inject()
 
-    fun isStandingIn(
-        x: Int,
-        y: Int,
-        moverSizeX: Int,
-        moverSizeY: Int,
-        destX: Int,
-        destY: Int,
-        sizeX: Int,
-        sizeY: Int
-    ): Boolean
+    fun smartRoute(srcPos: Position, destPos: Position) : Route {
+        return smartRoute(srcPos.x, srcPos.y, destPos.x, destPos.y, srcPos.z)
+    }
 
-    fun canInteract(
-        x: Int,
-        y: Int,
-        moverSize: Int,
-        destX: Int,
-        destY: Int,
-        sizeX: Int,
-        sizeY: Int,
-        walkFlag: Int,
-        z: Int
-    ): Boolean
+    fun smartRoute(srcX: Int, srcY: Int, destX: Int, destY: Int, level: Int): Route {
+        val pf = SmartPathFinder()
+        val flags = clipFlags(srcX, srcY, level, pf.searchMapSize)
+        return pf.findPath(flags, srcX, srcY, destX, destY)
+    }
 
-    fun canInteractSized(
-        curX: Int,
-        curY: Int,
-        moverSizeX: Int,
-        moverSizeY: Int,
-        destX: Int,
-        destY: Int,
-        sizeX: Int,
-        sizeY: Int,
-        walkingFlag: Int,
-        z: Int
-    ): Boolean
-
-    fun canDoorInteract(
-        curX: Int,
-        curY: Int,
-        size: Int,
-        destX: Int,
-        destY: Int,
-        type: Int,
-        rotation: Int,
-        z: Int
-    ): Boolean
-
-    fun canDecorationInteract(
-        curX: Int,
-        curY: Int,
-        size: Int,
-        destX: Int,
-        destY: Int,
-        rotation: Int,
-        type: Int,
-        z: Int
-    ) : Boolean
-
-    fun check(x: Int, y: Int, direction: Int, currentCost: Int)
-    fun reset()
-
-    companion object {
-        const val SOUTH_FLAG = 0x1
-
-        /**
-         * The west direction flag.
-         */
-        const val WEST_FLAG = 0x2
-
-        /**
-         * The north direction flag.
-         */
-        const val NORTH_FLAG = 0x4
-
-        /**
-         * The east direction flag.
-         */
-        const val EAST_FLAG = 0x8
-
-        /**
-         * The south-west direction flag.
-         */
-        const val SOUTH_WEST_FLAG = SOUTH_FLAG or WEST_FLAG
-
-        /**
-         * The north-west direction flag.
-         */
-        const val NORTH_WEST_FLAG = NORTH_FLAG or WEST_FLAG
-
-        /**
-         * The south-east direction flag.
-         */
-        const val SOUTH_EAST_FLAG = SOUTH_FLAG or EAST_FLAG
-
-        /**
-         * The north-east direction flag.
-         */
-        const val NORTH_EAST_FLAG = NORTH_FLAG or EAST_FLAG
+    fun clipFlags(centerX: Int, centerY: Int, level: Int, size: Int): IntArray {
+        val half = size / 2
+        val flags = IntArray(size * size)
+        val rangeX = centerX - half until centerX + half
+        val rangeY = centerY - half until centerY + half
+        for (y in rangeY) {
+            for (x in rangeX) {
+                val flag = regionManager.getClippingFlag(Position(x, y, level))
+                val lx = x - (centerX - half)
+                val ly = y - (centerY - half)
+                val index = (ly * size) + lx
+                flags[index] = flag
+            }
+        }
+        return flags
     }
 }

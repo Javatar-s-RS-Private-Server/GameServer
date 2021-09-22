@@ -7,7 +7,7 @@ import com.arandarkt.game.api.world.PlayerFactory
 import com.arandarkt.game.entity.character.player.Player
 
 class PlayerFactory : PlayerFactory {
-    override fun newPlayer(details: PlayerDetails, session: GameSession): PlayerCharacter {
-        return Player(details, session)
+    override fun newPlayer(details: PlayerDetails): PlayerCharacter {
+        return Player(details)
     }
 }

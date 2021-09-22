@@ -48,4 +48,5 @@ val packetModule = module {
     packet(LargeVarbit)
     packet(ClientScript)
     packet(GameMessage)
+    packet(ClearMinimapFlag)
 }

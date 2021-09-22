@@ -2,7 +2,7 @@ package com.arandarkt.definitions.loaders
 
 import com.arandarkt.definitions.MapFloorDefinition
 import com.arandarkt.definitions.ObjectPlacementDefinition
-import io.guthix.buffer.readSmallSmart
+import io.guthix.buffer.readUnsignedSmallSmart
 import io.netty.buffer.ByteBuf
 
 class ObjectPlacementLoader {
@@ -11,14 +11,14 @@ class ObjectPlacementLoader {
         val def = ObjectPlacementDefinition()
         var objectId = -1
         while (true) {
-            var offset: Int = buffer.readSmallSmart()
+            var offset: Int = buffer.readUnsignedSmallSmart()
             if (offset == 0) {
                 break
             }
             objectId += offset
             var location = 0
             while (true) {
-                offset = buffer.readSmallSmart()
+                offset = buffer.readUnsignedSmallSmart()
                 if (offset == 0) {
                     break
                 }

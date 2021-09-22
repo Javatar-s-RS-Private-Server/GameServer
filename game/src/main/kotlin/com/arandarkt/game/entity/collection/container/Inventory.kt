@@ -5,9 +5,10 @@ import com.arandarkt.game.api.components.ComponentManager
 import com.arandarkt.game.api.entity.collection.container.ContainerEvent
 import com.arandarkt.game.api.entity.collection.container.ItemContainer
 import com.arandarkt.game.api.entity.component
-import com.arandarkt.game.api.components.entity.items.DefinitionComponent
+import com.arandarkt.game.api.components.entity.items.ItemDefinitionComponent
 import com.arandarkt.game.api.components.entity.items.IdentificationComponent
 import com.arandarkt.game.api.entity.item.GameItem
+import com.arandarkt.game.api.entity.plus
 import com.arandarkt.game.api.entity.with
 import com.arandarkt.game.api.koin.emptyItem
 import com.arandarkt.game.api.world.location.components.IndexedComponent
@@ -24,11 +25,11 @@ class Inventory(override val size: Int = 28) : ItemContainer {
     }
 
     override fun addItem(item: GameItem): ContainerEvent {
-        if (!item.components.hasComponent<DefinitionComponent>())
+        if (!item.components.hasComponent<ItemDefinitionComponent>())
             return ContainerEvent(invalid = true)
         if (isFull())
             return ContainerEvent(true)
-        val def = item.component<DefinitionComponent>()
+        val def = item.component<ItemDefinitionComponent>()
 
         if (def.stackable) {
             return addStackableItem(item)
@@ -37,7 +38,7 @@ class Inventory(override val size: Int = 28) : ItemContainer {
         if (item.amount == 1) {
             val index = nextSlot()
             return if (index != -1) {
-                items[index] = item.with(IndexedComponent(index))
+                items[index] = item + IndexedComponent(index)
                 ContainerEvent(added = listOf(item))
             } else {
                 ContainerEvent(true)
@@ -49,7 +50,7 @@ class Inventory(override val size: Int = 28) : ItemContainer {
                 if (index == -1 && it == 0) {
                     return ContainerEvent(true)
                 } else if (index != -1) {
-                    items[index] = item.copy(1).with(IndexedComponent(index))
+                    items[index] = item.copy(1) + IndexedComponent(index)
                     added++
                 } else if (index == -1)
                     return@repeat
@@ -65,21 +66,21 @@ class Inventory(override val size: Int = 28) : ItemContainer {
         val index = items.indexOf(item)
         if (index != -1) {
             val found = items[index]
-            val def = found.component<DefinitionComponent>()
+            val def = found.component<ItemDefinitionComponent>()
             if (def.stackable) {
                 val amount = item.amount.toLong()
                 val amt = found.amount.toLong()
                 return if (amount + amt > Int.MAX_VALUE) {
                     ContainerEvent(true)
                 } else {
-                    items[index] = found.copy((amount + amt).toInt()).with(IndexedComponent(index))
+                    items[index] = found.copy((amount + amt).toInt()) + IndexedComponent(index)
                     ContainerEvent(added = listOf(items[index]))
                 }
             }
         } else {
             val slot = nextSlot()
             return if (slot != -1) {
-                items[slot] = item.with(IndexedComponent(slot))
+                items[slot] = item + IndexedComponent(slot)
                 ContainerEvent(added = listOf(item))
             } else {
                 ContainerEvent(true)
@@ -93,9 +94,9 @@ class Inventory(override val size: Int = 28) : ItemContainer {
             return ContainerEvent(invalid = true)
         val index = items.indexOf(item)
         if (index != -1) {
-            val def = item.component<DefinitionComponent>()
+            val def = item.component<ItemDefinitionComponent>()
             val found = items[index]
-            val fdef = found.component<DefinitionComponent>()
+            val fdef = found.component<ItemDefinitionComponent>()
             if (def.stackable && fdef.stackable) {
                 val amount = item.amount
                 val famount = found.amount
@@ -142,8 +143,8 @@ class Inventory(override val size: Int = 28) : ItemContainer {
 
     override fun hasAmount(item: GameItem): Boolean {
         val found = items.find { it.itemId == item.itemId } ?: return false
-        val def = item.component<DefinitionComponent>()
-        val odef = found.component<DefinitionComponent>()
+        val def = item.component<ItemDefinitionComponent>()
+        val odef = found.component<ItemDefinitionComponent>()
         if (def.stackable && odef.stackable) {
             return item.amount >= found.amount
         }

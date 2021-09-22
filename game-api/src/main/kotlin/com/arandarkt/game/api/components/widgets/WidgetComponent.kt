@@ -9,8 +9,8 @@ interface WidgetComponent : Component {
 
     val widgetId: Int
 
-    fun onButtonClicked(buttonId: Int, option: Int = 0)
-    fun onOpen()
-    fun onClose()
+    fun onButtonClicked(buttonId: Int, option: Int = 0) {}
+    fun onOpen() {}
+    fun onClose() {}
 
 }

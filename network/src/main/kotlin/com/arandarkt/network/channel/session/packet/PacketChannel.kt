@@ -4,6 +4,7 @@ import com.arandarkt.game.api.packets.GamePacketDecoder
 import com.arandarkt.game.api.packets.PacketHandler
 import com.arandarkt.network.channel.NettyChannel
 import com.arandarkt.game.api.packets.Packet
+import com.arandarkt.game.api.world.Ticker.Companion.GAME
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -34,6 +35,8 @@ class PacketChannel(private val channel: NettyChannel) {
                 if(p != null) {
                     channel.write(p)
                 }
+            } else if(packet.isClosed) {
+                return@repeat
             }
         }
         channel.flush()
@@ -56,7 +59,7 @@ class PacketChannel(private val channel: NettyChannel) {
         }
         .flowOn(Dispatchers.IO)
         .onEach { action(it) }
-        .launchIn(CoroutineScope(Dispatchers.Default))
+        .launchIn(GAME)
 
     fun shutdown() {
         outgoing.close()

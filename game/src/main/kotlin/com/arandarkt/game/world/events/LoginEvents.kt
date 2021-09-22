@@ -14,7 +14,7 @@ class LoginEvents : WorldEvent {
 
         logins.forEach {
             world.players.addEntity(it)
-            it.initialize()
+            it.onLogin()
         }
 
         world.loginQueue.removeAll(logins)

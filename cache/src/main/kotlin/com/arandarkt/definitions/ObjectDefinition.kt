@@ -35,7 +35,7 @@ class ObjectDefinition {
     var anInt2750: Int = 0
     var anInt2756: Int = 0
     var offsetHeight: Int = 0
-    var anInt2758: Int = 0
+    var walkingFlag: Int = 0
     var objectTypes: IntArray? = null
     var objectModels: IntArray? = null
     var configChangeDest: IntArray? = null
@@ -45,4 +45,7 @@ class ObjectDefinition {
     var recolorToReplace: ShortArray? = null
 
     var recolorToFind: ShortArray? = null
+
+    var textureToFind: ShortArray? = null
+    var textureToReplace: ShortArray? = null
 }

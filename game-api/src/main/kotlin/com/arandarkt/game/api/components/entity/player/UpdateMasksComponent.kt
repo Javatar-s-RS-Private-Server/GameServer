@@ -3,26 +3,24 @@ package com.arandarkt.game.api.components.entity.player
 import com.arandarkt.game.api.components.Component
 import com.arandarkt.game.api.components.entity.flags.FlagComponent
 import com.arandarkt.game.api.world.location.components.Position
+import kotlin.reflect.KClass
 
-class PlayerMaskComponent : Component {
+class UpdateMasksComponent : Component {
 
     val isUpdateRequired: Boolean
         get() = maskData != 0
 
     var maskData = 0
         private set
-    var syncedMaskData = 0
-        private set
 
-    var lastSceneGraph: Position = Position(0, 0, 0)
+    var lastSceneGraph: Position = Position.VOID_LOCATION
     var shouldUpdateSceneGraph: Boolean = false
 
-    val flags = mutableListOf<FlagComponent>()
-    val syncedFlags = mutableListOf<Boolean>()
+    val flags = mutableMapOf<KClass<*>, FlagComponent>()
 
     fun with(flagComponent: FlagComponent) {
-        if (!flags.contains(flagComponent)) {
-            flags.add(flagComponent)
+        if (!flags.containsKey(flagComponent::class)) {
+            flags[flagComponent::class] = flagComponent
         }
         maskData = maskData or flagComponent.flagId
     }
@@ -39,14 +37,6 @@ class PlayerMaskComponent : Component {
         if (maskData != 0) {
             maskData = 0
         }
+        shouldUpdateSceneGraph = false
     }
-
-    override suspend fun onTick(currentTick: Long) {
-
-    }
-
-    companion object {
-        const val SIZE = 11
-    }
-
 }
